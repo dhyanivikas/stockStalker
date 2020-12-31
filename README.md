@@ -10,7 +10,11 @@ volume increase alert etc.
 
 You'll need to add the secrets.yaml file in resources folder by yourselves
 and put following entries:
+
 {"x-rapidapi-key": "YOUR_RAPIDAPI_KEY",
 "x-rapidapi-host": "YOUR_CHOSEN_RAPIDAPI_HOST"}
 
-I've put that file into gitignore list for obvious reasons. 
+I've put that file into gitignore list for obvious reasons.
+
+PS: I've personally used IEX APIs for this project. They are pretty reasonable. 
+If you choose some other APIs, you might need to revisit the JSON structure and schema accordingly. 
