@@ -37,4 +37,4 @@ def getStockData():
     #Play the alert Media File
     #TODO: In future raise alarm only when conditions to buy a stock are met
     alertSounds.playMSFTAlert()
-    pync.notify(str(x["quote"]["latestPrice"]), title='Alert!! New Microsoft Stock Price')
+    pync.notify(str(latestPrice), title='Alert!! New Microsoft Stock Price')
