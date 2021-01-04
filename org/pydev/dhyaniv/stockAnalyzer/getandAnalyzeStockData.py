@@ -5,13 +5,13 @@ import requests
 import json
 import org.pydev.dhyaniv.mediaPlayer.alertSounds as alertSounds
 import org.pydev.dhyaniv.constants.constants as constants
+import org.pydev.dhyaniv.dbfetch.loadStalkerSubjects as loadStalkerSubjects
 import pync
 
 from os import path
 
-def getStockData():
-    
-    url = constants.IEXENPOINT 
+def getStockData(url, nameOfStock):
+     
     filepath = path.relpath(constants.APISECRETPATH)  
     
     with open(filepath) as f:
@@ -29,12 +29,25 @@ def getStockData():
     # Here We find the %age difference from the opening price
     percentDiff = (diff/openingPrice)*100
     
-    print("opening price was:--> "+str(openingPrice))
-    print("Latest Price is:--> " + str(latestPrice))
-    print("difference from opening is:--> "+str(diff))
-    print("% difference from opening is:--> "+str(percentDiff))
+    #print("opening price of "+nameOfStock+" was:--> "+str(openingPrice))
+    #print("Latest Price of "+nameOfStock+" is:--> " + str(latestPrice))
+    #print("difference from opening for "+nameOfStock+" is:--> "+str(round(diff,2)))
+    print("% open, curr, %diff for "+nameOfStock+":-> "+str(openingPrice)+" ,"+str(latestPrice)+", "+str(round(percentDiff,2))+ "%")
     
     #Play the alert Media File
     #TODO: In future raise alarm only when conditions to buy a stock are met
-    alertSounds.playMSFTAlert()
-    pync.notify(str(latestPrice), title='Alert!! New Microsoft Stock Price')
+    #alertSounds.playMSFTAlert()
+    #pync.notify(str(latestPrice), title='Alert!! New Microsoft Stock Price')
+    
+def getStalkedStocksData():
+    stockToTrack = loadStalkerSubjects.getStockSubjectsList()
+    print("****************")
+    for x in stockToTrack:
+        IEXendpoint = "https://investors-exchange-iex-trading.p.rapidapi.com/stock/"+str(x[1])+"/book"
+        #print(IEXendpoint) # Printing the symbol
+        #stockName = str(x[2])
+        stockName = str(x[1])
+        getStockData(IEXendpoint, stockName)
+        
+    print("****************\n")    
+            
