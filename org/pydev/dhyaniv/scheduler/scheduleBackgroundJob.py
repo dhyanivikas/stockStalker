@@ -8,7 +8,9 @@ import schedule
 if __name__ == "__main__":
     print("Hello guys!")
     #schedule.every(20).seconds.do(stockAnalyzer.getStockData)
-    schedule.every(constants.CHECKFREQUENCY).seconds.do(stockAnalyzer.getStockData)
+    #schedule.every(constants.CHECKFREQUENCY).seconds.do(stockAnalyzer.getStockData)
+    schedule.every(constants.CHECKFREQUENCY).seconds.do(stockAnalyzer.getStalkedStocksData)
+    
 
     while True:
         # Checks whether a scheduled task
