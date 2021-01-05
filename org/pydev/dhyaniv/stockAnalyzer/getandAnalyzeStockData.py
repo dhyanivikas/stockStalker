@@ -7,6 +7,7 @@ import org.pydev.dhyaniv.mediaPlayer.alertSounds as alertSounds
 import org.pydev.dhyaniv.constants.constants as constants
 import org.pydev.dhyaniv.dbfetch.loadStalkerSubjects as loadStalkerSubjects
 import pync
+from datetime import datetime
 
 from os import path
 
@@ -49,5 +50,29 @@ def getStalkedStocksData():
         stockName = str(x[1])
         getStockData(IEXendpoint, stockName)
         
-    print("****************\n")    
+    print("****************\n")  
+    
+    
+def harvestOpenPrice():
+    stockToHarvest = loadStalkerSubjects.getOpenPriceSubjectsList()
+    
+    print("*****Going to Register open prices now*****")
+    for x in stockToHarvest:
+        IEXendpoint = "https://investors-exchange-iex-trading.p.rapidapi.com/stock/"+str(x[1])+"/book"
+        filepath = path.relpath(constants.APISECRETPATH)  
+    
+        with open(filepath) as f:
+            data = f.read()
+        
+        hdrs = json.loads(data)   
+    
+        response = requests.request("GET", IEXendpoint, headers=hdrs)
+        y = json.loads(response.text)
+        openingPrice = y[constants.QUOTE][constants.OPEN]
+        now = datetime.now()
+        formatted_date = now.strftime('%Y-%m-%d')
+        #print (x[1]+"***"+formatted_date+"***"+str(openingPrice))
+        #print(x[1]+"***"+"***"+str(openingPrice))
+        loadStalkerSubjects.insertIntoOpenPriceTracker(x[1], formatted_date, round(openingPrice,2)) 
+              
             
