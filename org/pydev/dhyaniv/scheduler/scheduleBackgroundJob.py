@@ -9,7 +9,8 @@ if __name__ == "__main__":
     print("Hello guys!")
     #schedule.every(20).seconds.do(stockAnalyzer.getStockData)
     #schedule.every(constants.CHECKFREQUENCY).seconds.do(stockAnalyzer.getStockData)
-    schedule.every(constants.CHECKFREQUENCY).seconds.do(stockAnalyzer.getStalkedStocksData)
+    #schedule.every(constants.CHECKFREQUENCY).seconds.do(stockAnalyzer.getStalkedStocksData)
+    schedule.every(constants.CHECKFREQUENCY).seconds.do(stockAnalyzer.getSellNotificationData)
     
 
     while True:
