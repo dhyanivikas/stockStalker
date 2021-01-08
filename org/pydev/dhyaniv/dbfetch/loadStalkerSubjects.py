@@ -37,3 +37,11 @@ def insertIntoOpenPriceTracker(stock_symbol, trading_date, open_price):
     print(stock_symbol+"***"+trading_date+"***"+str(open_price))
     cur.execute(query, args)
     dbConnection.commit()
+    
+    
+def getSellTargets():
+    dbConnection = dbConn.getconnection()
+    cur = dbConnection.cursor()
+    cur.execute("select stock_symbol, stock_name, qty, min_target_price, buy_price from stocks_buys_and_targets where already_sold = 'N'")
+    openPriceStalkerSubjects = cur.fetchall()
+    return openPriceStalkerSubjects       
