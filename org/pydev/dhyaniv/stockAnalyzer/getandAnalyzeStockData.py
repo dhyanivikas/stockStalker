@@ -40,6 +40,30 @@ def getStockData(url, nameOfStock):
     #alertSounds.playMSFTAlert()
     #pync.notify(str(latestPrice), title='Alert!! New Microsoft Stock Price')
     
+def sellNotification(url, nameOfStock, qty, targetPrice,buyPrice):
+     
+    filepath = path.relpath(constants.APISECRETPATH)  
+    
+    with open(filepath) as f:
+        data = f.read()
+        
+    hdrs = json.loads(data)   
+    
+    response = requests.request("GET", url, headers=hdrs)
+    x = json.loads(response.text)
+    latestPrice = x[constants.QUOTE][constants.LATESTPRICE]
+    diff = round(((latestPrice-buyPrice)/buyPrice)*100, 2) 
+    #if (latestPrice > targetPrice*.75):
+    print("% Please consider selling "+str(qty) + " of "+nameOfStock+" at:-> "+str(latestPrice)+ " with "+ str(diff) +"% profit")
+    #if (latestPrice > buyPrice):    
+     #   print("% Please consider selling "+str(qty) + " of "+nameOfStock+" at:-> "+str(latestPrice)+ " with "+ str(diff) +"% profit")
+        
+    
+    #Play the alert Media File
+    #TODO: In future raise alarm only when conditions to buy a stock are met
+    #alertSounds.playMSFTAlert()
+    #pync.notify(str(latestPrice), title='Alert!! New Microsoft Stock Price')    
+    
 def getStalkedStocksData():
     stockToTrack = loadStalkerSubjects.getStockSubjectsList()
     print("****************")
@@ -50,7 +74,25 @@ def getStalkedStocksData():
         stockName = str(x[1])
         getStockData(IEXendpoint, stockName)
         
-    print("****************\n")  
+    print("****************\n")
+    
+def getSellNotificationData():
+    stockToTrack = loadStalkerSubjects.getSellTargets()
+    print("****************")
+    for x in stockToTrack:
+        IEXendpoint = "https://investors-exchange-iex-trading.p.rapidapi.com/stock/"+str(x[0])+"/book"
+        #stock_symbol = x[0]
+        stock_name = x[1]
+        qty = x[2]
+        min_target_price = x[3]
+        buy_price = x[4]
+        #print(IEXendpoint) # Printing the symbol
+        #stockName = str(x[2])
+        
+        #getStockData(IEXendpoint, stockName)
+        sellNotification(IEXendpoint, stock_name, qty, min_target_price, buy_price)
+        
+    print("****************\n")      
     
     
 def harvestOpenPrice():
